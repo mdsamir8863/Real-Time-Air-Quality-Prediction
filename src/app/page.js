@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 import Header from "./components/Header";
 import HeroBanner from "./components/HeroBanner";
 import CityCard from "./components/CityCard";
-// import SearchBar from "./components/SearchBar";
 import CitySearchBar from "./components/CitySearchBar";
+import Footer from "./components/Footer";
 
 const cities = [
   "Delhi",
@@ -45,7 +45,6 @@ export default function HomePage() {
         <HeroBanner />
 
         {/* 🔍 Search */}
-        {/* <SearchBar /> */}
         <div className="mt-6">
           <CitySearchBar />
         </div>
@@ -62,6 +61,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }
