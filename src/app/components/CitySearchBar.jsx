@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaSearch, FaSpinner } from "react-icons/fa";
 import toast from "react-hot-toast";
-import Loading from "../aqi/[city]/loading";
 
 const popularCities = [
   "Delhi", "Mumbai", "Bangalore", "Kolkata", "Chennai", "Hyderabad",
@@ -13,6 +12,7 @@ const popularCities = [
 
 export default function CitySearchBar() {
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false); // 👈 local loading state
   const router = useRouter();
 
   const handleSubmit = (e) => {
@@ -23,8 +23,13 @@ export default function CitySearchBar() {
       return;
     }
 
+    setLoading(true); // start loading spinner
+
     router.push(`/aqi/${query.trim()}`);
     setQuery("");
+
+    // simulate loading reset (not necessary in real case if loading happens elsewhere)
+    setTimeout(() => setLoading(false), 1000); 
   };
 
   const suggestions = popularCities.filter(city =>
@@ -42,7 +47,7 @@ export default function CitySearchBar() {
           onChange={(e) => setQuery(e.target.value)}
         />
         <button type="submit" className="absolute right-3 text-gray-500">
-         {Loading ? <FaSpinner className="animate-spin" /> : <FaSearch />}
+          {loading ? <FaSpinner className="animate-spin" /> : <FaSearch />}
         </button>
       </form>
 

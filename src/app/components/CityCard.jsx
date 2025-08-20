@@ -7,7 +7,8 @@ export default function CityCard({ city }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/aqi/${city.toLowerCase()}`);
+   router.push(`/aqi/${city.toLowerCase()}`);
+
   };
 
   return (

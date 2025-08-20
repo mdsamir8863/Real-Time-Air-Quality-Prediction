@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa";
 import AQIChart from "@/app/components/AQIChart";
 import HealthAdvisory from "@/app/components/HealthAdvisory";
-import NotFound from "./not-found";
 
 export default function CityAQIPage() {
   const { city } = useParams();
@@ -18,15 +17,7 @@ export default function CityAQIPage() {
   const fetchAQI = async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `https://api.api-ninjas.com/v1/airquality?city=${city}`,
-        {
-          headers: {
-            "X-Api-Key": process.env.NEXT_PUBLIC_API_NINJAS_KEY,
-          },
-        }
-      );
-
+      const res = await fetch(`/api/aqi?city=${city}`);
       if (!res.ok) throw new Error("Failed to fetch AQI");
 
       const result = await res.json();
@@ -52,22 +43,22 @@ export default function CityAQIPage() {
   }
 
   if (!data || !data.overall_aqi) {
-    notFound();
+    notFound(); // fallback to not-found.jsx
   }
 
   const aqi = data.overall_aqi;
   const category =
-    aqi <= 50
+    aqi === 1
       ? "Good"
-      : aqi <= 100
+      : aqi === 2
+      ? "Fair"
+      : aqi === 3
       ? "Moderate"
-      : aqi <= 150
-      ? "Unhealthy for Sensitive Groups"
-      : aqi <= 200
-      ? "Unhealthy"
-      : aqi <= 300
-      ? "Very Unhealthy"
-      : "Hazardous";
+      : aqi === 4
+      ? "Poor"
+      : aqi === 5
+      ? "Very Poor"
+      : "Unknown";
 
   return (
     <main className="max-w-5xl mx-auto px-4 py-8">
@@ -78,8 +69,7 @@ export default function CityAQIPage() {
         timestamp={new Date().toLocaleString()}
       />
       <AQIStats components={data} />
-
-      <div className="w-full flex flex-col items-center md:flex-row justify-between">
+      <div className="w-full flex flex-col items-center md:flex-row justify-between mt-8">
         <AQIChart aqi={aqi} />
         <HealthAdvisory category={category} />
       </div>
